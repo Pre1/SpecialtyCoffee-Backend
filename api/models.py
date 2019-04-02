@@ -2,6 +2,14 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
+class Status(models.Model):
+    title = models.CharField(max_length=120)
+    is_active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.title
+
+      
 class Product(models.Model):
 	"""
 	Description: Product
@@ -24,13 +32,3 @@ class Product(models.Model):
 	class Meta:
 		ordering = ['-created_at',]
 
-
-# class Order(models.Model):
-#     """
-#     Description: Order
-#     """
-    
-#     status = models.ForeignKey(Status, default=1, on_delete=models.CASCADE)
-
-#     class Meta:
-#         pass
