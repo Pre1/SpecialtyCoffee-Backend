@@ -8,13 +8,11 @@ from rest_framework.generics import (
 ## Status Serializers ##
 from .serializers import (
     StatusListSerializer,
-    StatusCreateUpdateSerializer
 )
 ## Product Serializers ##
 from .serializers import (
 	ProductListSerializer,
 	ProductDetailSerializer,
-	ProductCreateUpdateSerializer,
 )
 ## Permissions ##
 from rest_framework.permissions import (
@@ -100,20 +98,21 @@ class StatusListView(ListAPIView):
     serializer_class = StatusListSerializer
     search_fields = ['title', 'is_active']
 
-    
-class StatusCreateView(CreateAPIView):
-    serializer_class = StatusCreateUpdateSerializer
 
-    def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
+# delete
+# class StatusCreateView(CreateAPIView):
+#     serializer_class = StatusCreateUpdateSerializer
+
+#     def perform_create(self, serializer):
+#         serializer.save(owner=self.request.user)
 
         
-class StatusUpdateView(RetrieveUpdateAPIView):
-    queryset = Status.objects.all()
-    serializer_class = StatusCreateUpdateSerializer
-    lookup_field = 'id'
-    lookup_url_kwarg = 'status_id'
-    
+# class StatusUpdateView(RetrieveUpdateAPIView):
+#     queryset = Status.objects.all()
+#     serializer_class = StatusCreateUpdateSerializer
+#     lookup_field = 'id'
+#     lookup_url_kwarg = 'status_id'
+#### 
     
 class ProductListView(ListAPIView):
 	queryset = Product.objects.all()
@@ -131,18 +130,19 @@ class ProductDetailView(RetrieveAPIView):
 	permission_classes = [AllowAny, ]
 
 
-class ProductCreateView(CreateAPIView):
-	serializer_class = ProductCreateUpdateSerializer
-	permission_classes = [IsAdminUser,]
+#  delete
+# class ProductCreateView(CreateAPIView):
+# 	serializer_class = ProductCreateUpdateSerializer
+# 	permission_classes = [IsAdminUser,]
 
-	def perform_create(self, serializer):
-	    serializer.save(added_by=self.request.user)
+# 	def perform_create(self, serializer):
+# 	    serializer.save(added_by=self.request.user)
 
       
-class ProductUpdateView(RetrieveUpdateAPIView):
-	queryset = Product.objects.all()
-	serializer_class = ProductCreateUpdateSerializer
-	permission_classes = [IsAdminUser, ]
-	lookup_field = 'id'
-	lookup_url_kwarg = 'product_id'
-
+# class ProductUpdateView(RetrieveUpdateAPIView):
+# 	queryset = Product.objects.all()
+# 	serializer_class = ProductCreateUpdateSerializer
+# 	permission_classes = [IsAdminUser, ]
+# 	lookup_field = 'id'
+# 	lookup_url_kwarg = 'product_id'
+####

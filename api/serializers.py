@@ -72,11 +72,6 @@ class StatusListSerializer(serializers.ModelSerializer):
         model = Status
         fields = ['title', 'is_active']
 
-
-class StatusCreateUpdateSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Status
-        fields = ['title', 'is_active']
         
 
 class ProductListSerializer(serializers.ModelSerializer):
@@ -109,10 +104,3 @@ class ProductDetailSerializer(serializers.ModelSerializer):
 		model = Product
 		# fields = '__all__'
 		exclude = ['added_by']
-
-
-class ProductCreateUpdateSerializer(serializers.ModelSerializer):
-
-	class Meta:
-		model = Product
-		exclude = ['created_at', 'added_by']
