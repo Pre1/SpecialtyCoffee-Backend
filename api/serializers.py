@@ -16,7 +16,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
         model = User
         fields = ['id','username', 'password','first_name','last_name','email', 'token',]
 
-    def create(self, validated_data):
+    def create(self, validated_data): 
         username = validated_data['username']
         first_name = validated_data['first_name']
         last_name = validated_data['last_name']
