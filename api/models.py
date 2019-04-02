@@ -22,4 +22,15 @@ class Product(models.Model):
 		return self.name
 
 	class Meta:
-		ordering = ['created_at',]
+		ordering = ['-created_at',]
+
+
+# class Order(models.Model):
+#     """
+#     Description: Order
+#     """
+    
+#     status = models.ForeignKey(Status, default=1, on_delete=models.CASCADE)
+
+#     class Meta:
+#         pass
