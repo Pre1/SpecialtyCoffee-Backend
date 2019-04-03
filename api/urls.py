@@ -1,25 +1,38 @@
 from django.urls import path
 from rest_framework_jwt.views import obtain_jwt_token
 
+## Auth & Profile ##
 from .views import (
   ProfileDetailView,
   ProfileUpdateView, 
   UserCreateAPIView
 )
 
-## API Views ##
+## Product API Views ##
 from .views import (
-	UserCreateAPIView,
 	ProductListView,
 	ProductDetailView,
 )
 
+## Status API views ##
 from api.views import (
 	StatusListView,
 )
 
+## Order APIs ##
+from api.views import (
+  OrderListView,
+  OrderDetailView,
+  OrderCreateView,
+)
+
+## OrderProduct APIs ##
+from api.views import (
+  OrderProductCreateView,
+)
+
 urlpatterns = [
-  ## Auth ##
+    ## Auth ##
     path('login/', obtain_jwt_token, name='login'),
     path('register/', UserCreateAPIView.as_view(), name='register'),
     path('profile/update/<int:pk>/',ProfileUpdateView.as_view(), name='profile-update'),
@@ -33,4 +46,14 @@ urlpatterns = [
 
     path('products/detail/<int:product_id>/',
          ProductDetailView.as_view(), name='products-detail'),
+
+    ## Orders ##    
+    path('orders/list/', OrderListView.as_view(), name='orders-list'),
+    path('orders/detail/<int:order_id>/', OrderDetailView.as_view(), name='orders-detail'),
+    path('orders/create/', OrderCreateView.as_view(), name='orders-create'),
+
+    ## OrderProduct ##
+    path('orderproduct/create/', 
+      OrderProductCreateView.as_view(), name='orderproduct-create'),
+
 ]
