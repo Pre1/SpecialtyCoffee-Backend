@@ -8,3 +8,4 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         call_command('loaddata', 'products.json')
+        call_command('loaddata', 'statuss.json')
