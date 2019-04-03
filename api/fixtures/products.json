@@ -1,0 +1,61 @@
+[
+  {
+    "model": "api.product",
+    "pk": 1,
+    "fields": {
+      "name": "Kurimi Organic Ethiopia",
+      "process": "Washed",
+      "flavor": "Honeydew Melon, Passionfruit, Lemon Curd",
+      "origin": "ETHIOPIA",
+      "description": "Kurimi takes its name — and its inspiration — from an Amharic reference to excellence. This year's Kurimi delivers the mesmerizing floral aromatics that are its trademark and flavors of honeydew melon, passionfruit and lemon curd.",
+      "price": "20.31",
+      "image": "",
+      "created_at": "2019-02-27T08:29:22.789Z"
+    }
+  },
+  
+ {
+    "model": "api.product",
+    "pk": 2,
+    "fields": {
+      "name": "Tim Wendelboe - El Salvador Los Pirineos Espresso",
+      "process": "Washed",
+      "flavor": "nuts, dried fruit",
+      "origin": "El Salvador",
+      "description": "Speciality coffee from El Salvador, roasted in Norway by Tim Wendelboe, the 2004 World Barista Champion, 2005 World Cup Tasting Champion, and multiple Nordic Roaster of the year.Medium roast, perfect for espresso machines and moka pots. You can expect loads of sweetness resembling chocolate, nuts, and dried fruit.",
+      "price": "50",
+      "image": "",
+      "created_at": "2019-04-27T08:29:22.789Z"
+    }
+  },
+  
+  {
+    "model": "api.product",
+    "pk": 3,
+    "fields": {
+      "name": "Colombia Tres Santos",
+      "process": "Dry",
+      "flavor": "Honey, Tangerine, Cola",
+      "origin": "South America",
+      "description": "Buesaco, Nariño, is well on its way to earning grand cru status in Colombia’s coffee landscape. It is like an alternate-universe coffee version of 17th century Champagne, a place where uniquely inspiring quality is attracting the attention of connoisseurs and contributing to a fever pitch among buyers who flock to this small town during harvest in search of sparklingly bright and beautiful coffees. There are no sprawling estates or wealthy landowners, and it may be a long time before Buesaco is showing up on tourist maps. But with a combination of extreme elevation, temperate climate, and great soils, this tiny, modern-day Épernay is producing some of the most exciting coffees in the country.",
+      "price": "50.31",
+      "image": "",
+      "created_at": "2019-07-27T08:29:22.789Z"
+    }
+  },
+  
+  {
+    "model": "api.product",
+    "pk": 4,
+    "fields": {
+      "name": "Jazan Daier coffee",
+      "process": "Dry",
+      "flavor": "Dark chocolate, roasted nuts, chocolate core, almond milk, medium acid, red tea",
+      "origin": "Saudi Arabia",
+      "description": "Buesaco, Nariño, is well on its way to earning grand cru status in Colombia’s coffee landscape. It is like an alternate-universe coffee version of 17th century Champagne, a place where uniquely inspiring quality is attracting the attention of connoisseurs and contributing to a fever pitch among buyers who flock to this small town during harvest in search of sparklingly bright and beautiful coffees. There are no sprawling estates or wealthy landowners, and it may be a long time before Buesaco is showing up on tourist maps. But with a combination of extreme elevation, temperate climate, and great soils, this tiny, modern-day Épernay is producing some of the most exciting coffees in the country.",
+      "price": "90.31",
+      "image": "",
+      "created_at": "2019-09-27T08:29:22.789Z"
+    }
+  }
+]

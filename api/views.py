@@ -14,6 +14,20 @@ from .serializers import (
 	ProductListSerializer,
 	ProductDetailSerializer,
 )
+
+
+## Order ##
+from .serializers import (
+    OrderListSerializer,
+    OrderDetailSerializer,
+    OrderCreateUpdateSerializer,
+)
+
+## OrderProduct serializers ##
+from .serializers import (
+    OrderProductCreateUpdateSerializer,
+)
+
 ## Permissions ##
 from rest_framework.permissions import (
 	AllowAny,
@@ -27,6 +41,8 @@ from rest_framework.filters import (SearchFilter, OrderingFilter)
 from .models import Product
 from .models import Status
 from .models import Profile
+from .models import Order
+from .models import OrderProduct
 from django.contrib.auth.models import User
 
 
@@ -146,3 +162,41 @@ class ProductDetailView(RetrieveAPIView):
 # 	lookup_field = 'id'
 # 	lookup_url_kwarg = 'product_id'
 ####
+
+
+## Order APIs views ##
+class OrderListView(ListAPIView):
+    serializer_class = OrderListSerializer
+    permission_classes = [IsAuthenticated, ]
+
+    def get_queryset(self):
+        return Order.objects.filter(ordered_by=self.request.user)
+
+
+class OrderDetailView(RetrieveAPIView):
+    queryset = Order.objects.all()
+    serializer_class = OrderDetailSerializer
+    lookup_field = 'id'
+    lookup_url_kwarg = 'order_id'
+    permission_classes = [IsAuthenticated, ]
+
+
+class OrderCreateView(CreateAPIView):
+    serializer_class = OrderCreateUpdateSerializer
+    permission_classes =[IsAuthenticated, ]
+
+    def perform_create(self, serializer):
+      serializer.save(ordered_by=self.request.user)
+
+    def post(self, request):
+        pass
+
+
+## Order Products APIs views
+
+# Creating an orderProduct
+class OrderProductCreateView(CreateAPIView):
+    serializer_class= OrderProductCreateUpdateSerializer
+    permission_classes =[IsAuthenticated, ]
+
+

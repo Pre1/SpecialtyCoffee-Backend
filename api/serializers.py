@@ -7,28 +7,39 @@ from rest_framework_jwt.settings import api_settings
 from .models import (
   Profile,
   Product,
-  Status
+  Status,
+  OrderProduct,
+  Order,
 )
 
+
 class UserSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = User
         fields = ['id', 'username', 'first_name', 'last_name', 'email']
-        
+
+
 class UserCreateSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
-    token= serializers.CharField(allow_blank=True, read_only=True)
+    token = serializers.CharField(allow_blank=True, read_only=True)
+
     class Meta:
         model = User
-        fields = ['id','username', 'password','first_name','last_name','email', 'token',]
+        fields = ['id', 'username', 'password',
+            'first_name', 'last_name', 'email', 'token', ]
 
-    def create(self, validated_data): 
+    def create(self, validated_data):
         username = validated_data['username']
         first_name = validated_data['first_name']
         last_name = validated_data['last_name']
         email = validated_data['email']
         password = validated_data['password']
-        new_user = User(username=username)
+        new_user = User(
+            username=username,
+            first_name=first_name,
+            last_name=last_name,
+            email=email)
         new_user.set_password(password)
         new_user.save()
 
@@ -40,39 +51,41 @@ class UserCreateSerializer(serializers.ModelSerializer):
         jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
         payload = jwt_payload_handler(new_user)
         token = jwt_encode_handler(payload)
-        validated_data['token']= token
+        validated_data['token'] = token
         return validated_data
 
 
 class ProfileDetailSerializer(serializers.ModelSerializer):
     customer = UserSerializer()
+
     class Meta:
         model = Profile
         fields = ['customer', 'image']
 
+
 class ProfileCreateUpdateSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Profile
         fields = ['customer', 'image']
 
 
 class StatusListSerializer(serializers.ModelSerializer):
-    detail = serializers.HyperlinkedIdentityField(
-        view_name="api-detail",
-        lookup_field="id",
-        lookup_url_kwarg="status_id"
-    )
-    update = serializers.HyperlinkedIdentityField(
-        view_name="api-update",
-        lookup_field="id",
-        lookup_url_kwarg="status_id"
-    )
+    # detail = serializers.HyperlinkedIdentityField(
+    #     view_name="api-detail",
+    #     lookup_field="id",
+    #     lookup_url_kwarg="status_id"
+    # )
+    # update = serializers.HyperlinkedIdentityField(
+    #     view_name="api-update",
+    #     lookup_field="id",
+    #     lookup_url_kwarg="status_id"
+    # )
 
     class Meta:
         model = Status
         fields = ['title', 'is_active']
 
-        
 
 class ProductListSerializer(serializers.ModelSerializer):
 	detail = serializers.HyperlinkedIdentityField(
@@ -104,3 +117,45 @@ class ProductDetailSerializer(serializers.ModelSerializer):
 		model = Product
 		# fields = '__all__'
 		exclude = ['added_by']
+
+
+### Order Serializers ###
+
+class OrderProductSerializer(serializers.ModelSerializer):
+    price = serializers.SerializerMethodField()
+    class Meta:
+        model = OrderProduct
+        fields = ['id', 'order', 'product', 'quantity', 'price', ]
+
+    def get_price(self, obj):
+        return obj.get_price()
+
+
+class OrderListSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Order
+        fields = ['id', 'status', 'ordered_by']
+
+
+class OrderDetailSerializer(serializers.ModelSerializer):
+    order_products = OrderProductSerializer(many=True, read_only=True)
+    class Meta:
+        model = Order
+        fields = ['id','status', 'ordered_by', 'created_at', 'order_products']
+
+
+class OrderCreateUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Order
+        fields = ['id', 'status']
+
+
+
+## Order Product Serializers ##
+class OrderProductCreateUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OrderProduct
+        fields = ['order', 'product', 'quantity']
+
+
