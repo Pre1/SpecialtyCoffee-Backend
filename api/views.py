@@ -188,8 +188,8 @@ class OrderCreateView(CreateAPIView):
     def perform_create(self, serializer):
       serializer.save(ordered_by=self.request.user)
 
-    def post(self, request):
-        pass
+    # def post(self, request):
+    #     pass
 
 
 ## Order Products APIs views

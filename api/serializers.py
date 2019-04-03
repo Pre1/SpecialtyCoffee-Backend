@@ -35,6 +35,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
         last_name = validated_data['last_name']
         email = validated_data['email']
         password = validated_data['password']
+        
         new_user = User(
             username=username,
             first_name=first_name,
@@ -94,24 +95,13 @@ class ProductListSerializer(serializers.ModelSerializer):
 		lookup_url_kwarg="product_id"
 	)
 
-	update = serializers.HyperlinkedIdentityField(
-		view_name="products-update",
-		lookup_field="id",
-		lookup_url_kwarg="product_id"
-	)
-
 	class Meta:
 		model = Product
-		fields = ['id', 'detail', 'update', 'name',
+		fields = ['id', 'detail', 'name',
 				  'image', 'price', 'is_avaliable', ]
 
 
 class ProductDetailSerializer(serializers.ModelSerializer):
-	update = serializers.HyperlinkedIdentityField(
-		view_name="products-update",
-		lookup_field="id",
-		lookup_url_kwarg="product_id"
-	)
 
 	class Meta:
 		model = Product
@@ -122,20 +112,18 @@ class ProductDetailSerializer(serializers.ModelSerializer):
 ### Order Serializers ###
 
 class OrderProductSerializer(serializers.ModelSerializer):
-    price = serializers.SerializerMethodField()
+
     class Meta:
         model = OrderProduct
-        fields = ['id', 'order', 'product', 'quantity', 'price', ]
+        fields = ['id', 'order', 'product', 'quantity', 'total_price', ]
 
-    def get_price(self, obj):
-        return obj.get_price()
 
 
 class OrderListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Order
-        fields = ['id', 'status', 'ordered_by']
+        fields = ['id', 'status', 'ordered_by', 'total_price', 'created_at']
 
 
 class OrderDetailSerializer(serializers.ModelSerializer):
@@ -148,7 +136,7 @@ class OrderDetailSerializer(serializers.ModelSerializer):
 class OrderCreateUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
-        fields = ['id', 'status']
+        fields = ['id', 'status', 'total_price']
 
 
 

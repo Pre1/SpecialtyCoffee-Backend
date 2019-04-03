@@ -10,6 +10,17 @@ class Profile(models.Model):
 		return self.customer.username
 
 
+
+"""
+Status options:
+
+- New
+- In Progress 
+- Completed
+- Canceled
+- On Hold
+
+"""
 class Status(models.Model):
 	title = models.CharField(max_length=120)
 	is_active = models.BooleanField(default=True)
@@ -46,7 +57,7 @@ class Product(models.Model):
 order = [
 	{status},
 	{ordered_by},
-	{order_products},
+	[{order_products}],
 ]	
 """
 
@@ -66,6 +77,8 @@ class Order(models.Model):
 		on_delete=models.CASCADE,
 		related_name='customer_orders')
 
+	total_price = models.DecimalField(max_digits=5,default=0.0, decimal_places=2)
+
 	created_at = models.DateTimeField(auto_now_add=True)
 
 	def get_total_price(self):
@@ -73,7 +86,11 @@ class Order(models.Model):
 		# return sum(self.order_products)
 
 	def __str__(self):
-		return "order by: {}".format(self.ordered_by.username)
+		return "id: {} => order by: {}".format(self.id, self.ordered_by.username)
+
+	class Meta:
+		ordering = ['-created_at', ]
+
 
 
 
@@ -103,11 +120,11 @@ class OrderProduct(models.Model):
 
 	quantity = models.PositiveIntegerField(default=1)
 
-	
+	total_price = models.DecimalField(max_digits=5, default=0.0, decimal_places=2)
 
 	def get_price(self):
 		return self.product.price * self.quantity
 
 	def __str__(self):
-		return self.product.name
+		return "Product: {} || quantity: {}".format(self.product.name, self.quantity)
 
