@@ -3,6 +3,7 @@ from rest_framework.generics import (
     RetrieveAPIView,
     RetrieveUpdateAPIView,
     CreateAPIView,
+    DestroyAPIView,
 )
 
 ## Status Serializers ##
@@ -26,6 +27,7 @@ from .serializers import (
 ## OrderProduct serializers ##
 from .serializers import (
     OrderProductCreateUpdateSerializer,
+    OrderProductQuantityUpdateSerializer
 )
 
 ## Permissions ##
@@ -200,3 +202,17 @@ class OrderProductCreateView(CreateAPIView):
     permission_classes =[IsAuthenticated, ]
 
 
+# maybe we can use the same serializer as the create API view
+class OrderProductQuantityUpdateView(RetrieveUpdateAPIView):
+    queryset = OrderProduct.objects.all()
+    serializer_class = OrderProductQuantityUpdateSerializer
+    lookup_field = 'id'
+    lookup_url_kwarg = 'orderproduct_id'
+    permission_classes = [IsAuthenticated, ] 
+
+
+class OrderProductDeleteView(DestroyAPIView):
+    queryset = OrderProduct.objects.all()
+    lookup_field = 'id'
+    lookup_url_kwarg = 'orderproduct_id'
+    permission_classes = [IsAuthenticated, ] 

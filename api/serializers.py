@@ -72,16 +72,6 @@ class ProfileCreateUpdateSerializer(serializers.ModelSerializer):
 
 
 class StatusListSerializer(serializers.ModelSerializer):
-    # detail = serializers.HyperlinkedIdentityField(
-    #     view_name="api-detail",
-    #     lookup_field="id",
-    #     lookup_url_kwarg="status_id"
-    # )
-    # update = serializers.HyperlinkedIdentityField(
-    #     view_name="api-update",
-    #     lookup_field="id",
-    #     lookup_url_kwarg="status_id"
-    # )
 
     class Meta:
         model = Status
@@ -147,3 +137,9 @@ class OrderProductCreateUpdateSerializer(serializers.ModelSerializer):
         fields = ['order', 'product', 'quantity']
 
 
+class OrderProductQuantityUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OrderProduct
+        fields = ['quantity']
+
+ 

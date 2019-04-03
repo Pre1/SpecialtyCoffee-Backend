@@ -29,6 +29,8 @@ from api.views import (
 ## OrderProduct APIs ##
 from api.views import (
   OrderProductCreateView,
+  OrderProductDeleteView,
+  OrderProductQuantityUpdateView,
 )
 
 urlpatterns = [
@@ -55,5 +57,11 @@ urlpatterns = [
     ## OrderProduct ##
     path('orderproduct/create/', 
       OrderProductCreateView.as_view(), name='orderproduct-create'),
+    
+    path('orderproduct/delete/<int:orderproduct_id>', 
+      OrderProductDeleteView.as_view(), name='orderproduct-delete'),
+
+    path('orderproduct/update_quantity/<int:orderproduct_id>', 
+      OrderProductQuantityUpdateView.as_view(), name='orderproduct-update-quantity'),
 
 ]
