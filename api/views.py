@@ -90,7 +90,8 @@ class ProfileUpdateView(APIView):
 
     def put(self, request, pk, format=None):
         
-        profile = Profile.objects.get(id=pk)
+        profile = self.get_object(pk)
+            # request.FILES for for any type of files req 
         if(request.data.get('image')):
             data= {
                 "image": request.data['image'],
@@ -111,27 +112,11 @@ class ProfileUpdateView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-
+# No need for listing 
 class StatusListView(ListAPIView):
-    queryset = Status.objects.all()
+    queryset = Status.objects.filter(is_active=True)
     serializer_class = StatusListSerializer
-    search_fields = ['title', 'is_active']
 
-
-# delete
-# class StatusCreateView(CreateAPIView):
-#     serializer_class = StatusCreateUpdateSerializer
-
-#     def perform_create(self, serializer):
-#         serializer.save(owner=self.request.user)
-
-        
-# class StatusUpdateView(RetrieveUpdateAPIView):
-#     queryset = Status.objects.all()
-#     serializer_class = StatusCreateUpdateSerializer
-#     lookup_field = 'id'
-#     lookup_url_kwarg = 'status_id'
-#### 
     
 class ProductListView(ListAPIView):
 	queryset = Product.objects.all()
@@ -141,6 +126,7 @@ class ProductListView(ListAPIView):
 	filter_backends = [OrderingFilter, SearchFilter]
 
 
+# only need list API view 
 class ProductDetailView(RetrieveAPIView):
 	queryset = Product.objects.all()
 	serializer_class = ProductDetailSerializer
@@ -173,7 +159,7 @@ class OrderListView(ListAPIView):
     permission_classes = [IsAuthenticated, ]
 
     def get_queryset(self):
-        return Order.objects.filter(ordered_by=self.request.user)
+        return Order.objects.filter(ordered_by=self.request.user.profile)
 
 
 class OrderDetailView(RetrieveAPIView):
@@ -189,7 +175,7 @@ class OrderCreateView(CreateAPIView):
     permission_classes =[IsAuthenticated, ]
 
     def perform_create(self, serializer):
-      serializer.save(ordered_by=self.request.user)
+      serializer.save(ordered_by=self.request.user.profile)
 
     # def post(self, request):
     #     pass
@@ -211,6 +197,7 @@ class OrderProductQuantityUpdateView(RetrieveUpdateAPIView):
     lookup_url_kwarg = 'orderproduct_id'
     permission_classes = [IsAuthenticated, ] 
 
+# No need for this view AT ALL
 class OrderProductDetailView(RetrieveAPIView):
     queryset = OrderProduct.objects.all()
     serializer_class = OrderProductSerializer

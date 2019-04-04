@@ -1,10 +1,11 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 
 class Profile(models.Model):
-	customer = models.ForeignKey(User, default=1, on_delete=models.CASCADE)
+	# from fk to 1to1
+	customer = models.OneToOneField(User, default=1, on_delete=models.CASCADE)
 	image = models.ImageField(null=True, blank=True)
 
 	def __str__(self):
@@ -74,7 +75,6 @@ class Order(models.Model):
 
 	ordered_by = models.ForeignKey(
 		Profile,
-		default=1, 
 		on_delete=models.CASCADE,
 		related_name='customer_orders')
 
@@ -138,8 +138,9 @@ class OrderProduct(models.Model):
 		return "Product: {} || quantity: {}".format(self.product.name, self.quantity)
 
 
-
-@receiver(post_save, sender=OrderProduct)
+# check total_price for orderProduct 
+# after chaning it to pre_save
+@receiver(pre_save, sender=OrderProduct)
 def get_price(instance, *args, **kwargs):
 	print("===================")
 	print(vars(instance))
@@ -148,9 +149,11 @@ def get_price(instance, *args, **kwargs):
 	print("instance.product.price: ", instance.product.price)
 	print("instance.quantity: ", instance.quantity)
 	total_price = instance.product.price * instance.quantity
+	
 	instance.total_price = total_price
 	print("total_price: ", total_price)
 
+	# post save and post delete signal
 	instance.order.set_total_price()
 
 

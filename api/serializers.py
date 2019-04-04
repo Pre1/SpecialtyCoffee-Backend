@@ -12,7 +12,7 @@ from .models import (
   Order,
 )
 
-
+# validate first_name, last_name in ProfileUpdateView
 class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -45,6 +45,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
         new_user.save()
 
         # Saving the user to a new profile:
+        # post save signal on user model
         new_profile = Profile(customer=new_user)
         new_profile.save()
 
@@ -55,20 +56,6 @@ class UserCreateSerializer(serializers.ModelSerializer):
         validated_data['token'] = token
         return validated_data
 
-
-class ProfileDetailSerializer(serializers.ModelSerializer):
-    customer = UserSerializer()
-
-    class Meta:
-        model = Profile
-        fields = ['customer', 'image']
-
-
-class ProfileCreateUpdateSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Profile
-        fields = ['customer', 'image']
 
 
 class StatusListSerializer(serializers.ModelSerializer):
@@ -90,7 +77,8 @@ class ProductListSerializer(serializers.ModelSerializer):
 		fields = ['id', 'detail', 'name',
 				  'image', 'price', 'is_avaliable', ]
 
-
+# only need for adding options and variant to the product
+# more efficient: making one request the list product api
 class ProductDetailSerializer(serializers.ModelSerializer):
 
 	class Meta:
@@ -103,13 +91,14 @@ class ProductDetailSerializer(serializers.ModelSerializer):
 
 class OrderProductSerializer(serializers.ModelSerializer):
 
-    total_price = serializers.SerializerMethodField()
+    # total_price = serializers.SerializerMethodField()
+
     class Meta:
         model = OrderProduct
         fields = ['id', 'order', 'product', 'quantity', 'total_price', ]
 
-    def get_total_price(self, obj):
-        return obj.get_price()
+    # def get_total_price(self, obj):
+    #     return obj.get_price()
 
 
 class OrderListSerializer(serializers.ModelSerializer):
@@ -121,6 +110,7 @@ class OrderListSerializer(serializers.ModelSerializer):
 
 class OrderDetailSerializer(serializers.ModelSerializer):
     order_products = OrderProductSerializer(many=True, read_only=True)
+    status = StatusListSerializer()
     class Meta:
         model = Order
         fields = ['id','status', 'ordered_by', 'created_at', 'order_products']
@@ -137,7 +127,7 @@ class OrderCreateUpdateSerializer(serializers.ModelSerializer):
 class OrderProductCreateUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = OrderProduct
-        fields = ['order', 'product', 'quantity']
+        fields = ['order', 'product', 'quantity', 'total_price']
 
 
 class OrderProductQuantityUpdateSerializer(serializers.ModelSerializer):
@@ -146,3 +136,17 @@ class OrderProductQuantityUpdateSerializer(serializers.ModelSerializer):
         fields = ['quantity']
 
  
+
+class ProfileDetailSerializer(serializers.ModelSerializer):
+    customer = UserSerializer()
+    customer_orders = OrderDetailSerializer(many=True)
+    class Meta:
+        model = Profile
+        fields = ['customer', 'image', 'customer_orders']
+
+
+class ProfileCreateUpdateSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Profile
+        fields = ['customer', 'image']
