@@ -95,7 +95,7 @@ class Order(models.Model):
 
 
 	def __str__(self):
-		return "id: {} => order by: {}".format(self.id, self.ordered_by.username)
+		return "id: {} => order by: {}".format(self.id, self.ordered_by.customer.username)
 
 	class Meta:
 		ordering = ['-created_at', ]
