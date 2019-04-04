@@ -26,6 +26,7 @@ from .serializers import (
 
 ## OrderProduct serializers ##
 from .serializers import (
+    OrderProductSerializer,
     OrderProductCreateUpdateSerializer,
     OrderProductQuantityUpdateSerializer
 )
@@ -210,6 +211,12 @@ class OrderProductQuantityUpdateView(RetrieveUpdateAPIView):
     lookup_url_kwarg = 'orderproduct_id'
     permission_classes = [IsAuthenticated, ] 
 
+class OrderProductDetailView(RetrieveAPIView):
+    queryset = OrderProduct.objects.all()
+    serializer_class = OrderProductSerializer
+    lookup_field = 'id'
+    lookup_url_kwarg = 'orderproduct_id'
+    permission_classes = [IsAuthenticated, ] 
 
 class OrderProductDeleteView(DestroyAPIView):
     queryset = OrderProduct.objects.all()

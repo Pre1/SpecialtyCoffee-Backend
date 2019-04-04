@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
-
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 class Profile(models.Model):
 	customer = models.ForeignKey(User, default=1, on_delete=models.CASCADE)
@@ -72,7 +73,7 @@ class Order(models.Model):
 		related_name='orders_status')
 
 	ordered_by = models.ForeignKey(
-		User,
+		Profile,
 		default=1, 
 		on_delete=models.CASCADE,
 		related_name='customer_orders')
@@ -81,9 +82,17 @@ class Order(models.Model):
 
 	created_at = models.DateTimeField(auto_now_add=True)
 
-	def get_total_price(self):
-		print(self.order_products)
-		# return sum(self.order_products)
+	def set_total_price(self):
+		print("========Order Model========")
+		print("self.order_products.all(): ", self.order_products.values_list('total_price', flat=True))
+		print("sum: ", sum(self.order_products.all().values_list('total_price', flat=True)))
+		print("total price: ", self.total_price)
+		print("========Order Model========")
+
+		self.total_price = sum(self.order_products.all().values_list('total_price', flat=True))
+		self.save()
+		print("total price: ", self.total_price)
+
 
 	def __str__(self):
 		return "id: {} => order by: {}".format(self.id, self.ordered_by.username)
@@ -127,4 +136,21 @@ class OrderProduct(models.Model):
 
 	def __str__(self):
 		return "Product: {} || quantity: {}".format(self.product.name, self.quantity)
+
+
+
+@receiver(post_save, sender=OrderProduct)
+def get_price(instance, *args, **kwargs):
+	print("===================")
+	print(vars(instance))
+	print("===================")
+
+	print("instance.product.price: ", instance.product.price)
+	print("instance.quantity: ", instance.quantity)
+	total_price = instance.product.price * instance.quantity
+	instance.total_price = total_price
+	print("total_price: ", total_price)
+
+	instance.order.set_total_price()
+
 

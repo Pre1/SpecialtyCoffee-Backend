@@ -103,10 +103,13 @@ class ProductDetailSerializer(serializers.ModelSerializer):
 
 class OrderProductSerializer(serializers.ModelSerializer):
 
+    total_price = serializers.SerializerMethodField()
     class Meta:
         model = OrderProduct
         fields = ['id', 'order', 'product', 'quantity', 'total_price', ]
 
+    def get_total_price(self, obj):
+        return obj.get_price()
 
 
 class OrderListSerializer(serializers.ModelSerializer):
