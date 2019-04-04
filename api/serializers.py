@@ -146,7 +146,6 @@ class ProfileDetailSerializer(serializers.ModelSerializer):
 
 
 class ProfileCreateUpdateSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Profile
-        fields = ['customer', 'image']
+        fields = ['image']

@@ -11,7 +11,9 @@ class Profile(models.Model):
 	def __str__(self):
 		return self.customer.username
 
-
+@receiver(post_save, sender=User)
+def create_profile(instance, *args, **kwargs):
+	Profile.objects.create(customer=instance)
 
 """
 Status options:

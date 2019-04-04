@@ -89,23 +89,12 @@ class ProfileUpdateView(APIView):
 
 
     def put(self, request, pk, format=None):
-        
         profile = self.get_object(pk)
-            # request.FILES for for any type of files req 
-        if(request.data.get('image')):
-            data= {
-                "image": request.data['image'],
-                "customer": request.data['customer']
-            }
-        else:
-            data={
-                "customer":request.data['customer']
-            }
+
+        data= {"image": request.data['image']} if request.data.get('image') else {"image": None}
         serializer = ProfileCreateUpdateSerializer(profile, data=data)
-        user= User.objects.get(id=request.data['customer'])
-        user.first_name= request.data['first_name']
-        user.last_name= request.data['last_name']
-        user.save()
+        user= profile.customer
+        user.update(**request.data['customer'])
         if serializer.is_valid():
             serializer.save()
             return Response(ProfileDetailSerializer(profile).data)

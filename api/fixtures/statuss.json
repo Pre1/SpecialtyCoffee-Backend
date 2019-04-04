@@ -3,7 +3,7 @@
     "model": "api.status",
     "pk": 1,
     "fields": {
-      "title": "New",
+      "title": "Cart",
       "is_active": "True"
     }
   },
@@ -11,13 +11,21 @@
     "model": "api.status",
     "pk": 2,
     "fields": {
-      "title": "On Hold",
+      "title": "New",
       "is_active": "True"
     }
   },
   {
     "model": "api.status",
     "pk": 3,
+    "fields": {
+      "title": "In Progress",
+      "is_active": "True"
+    }
+  },
+  {
+    "model": "api.status",
+    "pk": 4,
     "fields": {
       "title": "Completed",
       "is_active": "True"
@@ -30,5 +38,5 @@
       "title": "Canceled",
       "is_active": "True"
     }
-  }
+  },
 ]
