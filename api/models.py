@@ -77,7 +77,7 @@ class Order(models.Model):
 		on_delete=models.CASCADE,
 		related_name='customer_orders')
 
-	total_price = models.DecimalField(max_digits=5,default=0.0, decimal_places=2)
+	total_price = models.DecimalField(max_digits=15,default=0.0, decimal_places=2)
 
 	created_at = models.DateTimeField(auto_now_add=True)
 
@@ -133,7 +133,7 @@ class OrderProduct(models.Model):
 
 	quantity = models.PositiveIntegerField(default=1)
 
-	total_price = models.DecimalField(max_digits=5, default=0.0, decimal_places=2)
+	total_price = models.DecimalField(max_digits=15, default=0.0, decimal_places=2)
 
 	def __str__(self):
 		return "OrderProduct ID: {} || Product ID: {} || quantity: {} || total_price: {}".format(
