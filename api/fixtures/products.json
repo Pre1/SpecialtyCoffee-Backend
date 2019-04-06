@@ -9,7 +9,7 @@
       "origin": "ETHIOPIA",
       "description": "Kurimi takes its name — and its inspiration — from an Amharic reference to excellence. This year's Kurimi delivers the mesmerizing floral aromatics that are its trademark and flavors of honeydew melon, passionfruit and lemon curd.",
       "price": "20.31",
-      "image": "",
+      "image": "01.jpg",
       "created_at": "2019-02-27T08:29:22.789Z"
     }
   },
@@ -24,7 +24,7 @@
       "origin": "El Salvador",
       "description": "Speciality coffee from El Salvador, roasted in Norway by Tim Wendelboe, the 2004 World Barista Champion, 2005 World Cup Tasting Champion, and multiple Nordic Roaster of the year.Medium roast, perfect for espresso machines and moka pots. You can expect loads of sweetness resembling chocolate, nuts, and dried fruit.",
       "price": "50",
-      "image": "",
+      "image": "02.png",
       "created_at": "2019-04-27T08:29:22.789Z"
     }
   },
@@ -39,7 +39,7 @@
       "origin": "South America",
       "description": "Buesaco, Nariño, is well on its way to earning grand cru status in Colombia’s coffee landscape. It is like an alternate-universe coffee version of 17th century Champagne, a place where uniquely inspiring quality is attracting the attention of connoisseurs and contributing to a fever pitch among buyers who flock to this small town during harvest in search of sparklingly bright and beautiful coffees. There are no sprawling estates or wealthy landowners, and it may be a long time before Buesaco is showing up on tourist maps. But with a combination of extreme elevation, temperate climate, and great soils, this tiny, modern-day Épernay is producing some of the most exciting coffees in the country.",
       "price": "50.31",
-      "image": "",
+      "image": "03.jpg",
       "created_at": "2019-07-27T08:29:22.789Z"
     }
   },
@@ -54,7 +54,21 @@
       "origin": "Saudi Arabia",
       "description": "Buesaco, Nariño, is well on its way to earning grand cru status in Colombia’s coffee landscape. It is like an alternate-universe coffee version of 17th century Champagne, a place where uniquely inspiring quality is attracting the attention of connoisseurs and contributing to a fever pitch among buyers who flock to this small town during harvest in search of sparklingly bright and beautiful coffees. There are no sprawling estates or wealthy landowners, and it may be a long time before Buesaco is showing up on tourist maps. But with a combination of extreme elevation, temperate climate, and great soils, this tiny, modern-day Épernay is producing some of the most exciting coffees in the country.",
       "price": "90.31",
-      "image": "",
+      "image": "04.png",
+      "created_at": "2019-09-27T08:29:22.789Z"
+    }
+  },
+  {
+    "model": "api.product",
+    "pk": 5,
+    "fields": {
+      "name": "Hug in Mug Special Ed. Coffee",
+      "process": "Dry",
+      "flavor": "Dark chocolate, roasted nuts and red tea",
+      "origin": "Saudi Arabia",
+      "description": "The world’s most famous blend, created with Java and Arabian mocha beans long before coffee was widely grown.",
+      "price": "900.31",
+      "image": "cafe.png",
       "created_at": "2019-09-27T08:29:22.789Z"
     }
   }

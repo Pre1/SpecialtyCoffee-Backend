@@ -33,10 +33,10 @@
   },
   {
     "model": "api.status",
-    "pk": 4,
+    "pk": 5,
     "fields": {
       "title": "Canceled",
       "is_active": "True"
     }
-  },
+  }
 ]
