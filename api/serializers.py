@@ -92,10 +92,21 @@ class ProductDetailSerializer(serializers.ModelSerializer):
 class OrderProductSerializer(serializers.ModelSerializer):
 
     # total_price = serializers.SerializerMethodField()
+    product = serializers.SerializerMethodField()
 
     class Meta:
         model = OrderProduct
         fields = ['id', 'order', 'product', 'quantity', 'total_price', ]
+
+    def get_product(self, obj):
+        prod_id = obj.product.id
+        prod_name = obj.product.name
+        price = obj.product.price
+        return {
+            "id": prod_id,
+            "name": prod_name,
+            "price": price,
+        }
 
     # def get_total_price(self, obj):
     #     return obj.get_price()

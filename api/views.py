@@ -209,7 +209,14 @@ class OrderProductCreateView(CreateAPIView):
 
 
         # new_order_prod.save()
+
         serializer = self.serializer_class(new_order_prod, data=new_data)
+
+        print("=========Serializer========")
+        print("serializer: ", serializer)
+        print("vars(serializer): ", vars(serializer))
+        print("=========END Serializer END========")
+
         if serializer.is_valid():
             serializer.save()
             return Response(OrderProductSerializer(new_order_prod).data)
@@ -221,7 +228,14 @@ class OrderProductQuantityUpdateView(RetrieveUpdateAPIView):
     serializer_class = OrderProductQuantityUpdateSerializer
     lookup_field = 'id'
     lookup_url_kwarg = 'orderproduct_id'
-    permission_classes = [IsAuthenticated, ] 
+    permission_classes = [IsAuthenticated, ]
+
+    def perform_update(self, serializer):
+        print("=========OrderProductQuantityUpdateView========")
+        print("serializer: ", serializer)
+        print("vars(serializer): ", vars(serializer))
+        print("=========END OrderProductQuantityUpdateView END========")
+        serializer.save()
 
 # No need for this view AT ALL
 class OrderProductDetailView(RetrieveAPIView):
