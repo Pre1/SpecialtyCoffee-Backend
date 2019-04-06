@@ -83,18 +83,23 @@ class Order(models.Model):
 
 	def set_total_price(self):
 		print("========Order Model========")
-		print("self.order_products.all(): ", self.order_products.values_list('total_price', flat=True))
+		print("self.order_products.all(): ", 
+			self.order_products.all())
 		print("sum: ", sum(self.order_products.all().values_list('total_price', flat=True)))
-		print("total price: ", self.total_price)
-		print("========Order Model========")
+		print("BEFORE total price: ", self.total_price)
+		
 
 		self.total_price = sum(self.order_products.all().values_list('total_price', flat=True))
 		self.save()
-		print("total price: ", self.total_price)
-
+		print("AFTER total price: ", self.total_price)
+		print("========Order Model========")
 
 	def __str__(self):
-		return "id: {} => order by: {}".format(self.id, self.ordered_by.customer.username)
+		return "id: {} || order by: {} || total_price: {}".format(
+			self.id,
+			self.ordered_by.customer.username,
+			self.total_price,
+		)
 
 	class Meta:
 		ordering = ['-created_at', ]
@@ -130,39 +135,24 @@ class OrderProduct(models.Model):
 
 	total_price = models.DecimalField(max_digits=5, default=0.0, decimal_places=2)
 
-	def get_price(self):
-		return self.product.price * self.quantity
-
 	def __str__(self):
-		return "Product: {} || quantity: {}".format(self.product.name, self.quantity)
+		return "OrderProduct ID: {} || Product ID: {} || quantity: {} || total_price: {}".format(
+			self.id,
+			self.product.id, 
+			self.quantity,
+			self.total_price,
+		)
 
 
 ## Signals ##
 
-# check total_price for orderProduct 
 # after chaning it to pre_save
 @receiver(post_save, sender=OrderProduct)
 @receiver(post_delete, sender=OrderProduct)
 def get_price(instance, *args, **kwargs):
-	print("===================")
-	print("vars: ", vars(instance))
-	print("instance: ", instance)
-	print("===================")
-
-	# print("instance.product.price: ", instance.product.price)
-	# print("instance.quantity: ", instance.quantity)
-	# total_price = instance.product.price * instance.quantity
-	
-	# instance.total_price = total_price
-	# print("total_price: ", total_price)
-
 	# post save and post delete signal
 	instance.order.set_total_price()
 
-
-# @receiver(pre_save, sender=OrderProduct)
-# def get_product_price(instance, *args, **kwargs):
-# 	instance.get_price()
 
 @receiver(post_save, sender=User)
 def create_profile(instance, *args, **kwargs):

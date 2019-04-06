@@ -135,24 +135,6 @@ class ProductDetailView(RetrieveAPIView):
 	permission_classes = [AllowAny, ]
 
 
-#  delete
-# class ProductCreateView(CreateAPIView):
-# 	serializer_class = ProductCreateUpdateSerializer
-# 	permission_classes = [IsAdminUser,]
-
-# 	def perform_create(self, serializer):
-# 	    serializer.save(added_by=self.request.user)
-
-      
-# class ProductUpdateView(RetrieveUpdateAPIView):
-# 	queryset = Product.objects.all()
-# 	serializer_class = ProductCreateUpdateSerializer
-# 	permission_classes = [IsAdminUser, ]
-# 	lookup_field = 'id'
-# 	lookup_url_kwarg = 'product_id'
-####
-
-
 ## Order APIs views ##
 class OrderListView(ListAPIView):
     serializer_class = OrderListSerializer
@@ -177,9 +159,6 @@ class OrderCreateView(CreateAPIView):
     def perform_create(self, serializer):
       serializer.save(ordered_by=self.request.user.profile)
 
-    # def post(self, request):
-    #     pass
-
 class OrderStatusUpdateView(RetrieveUpdateAPIView):
     queryset = Order.objects.all()
     serializer_class = OrderCreateUpdateSerializer
@@ -203,16 +182,8 @@ class OrderProductCreateView(CreateAPIView):
         product_id = request.data['product']
         quantity = request.data['quantity']
 
-        # TODO: use get or create method instead
         order_obj = Order.objects.get(id=order_id)
         product_obj = Product.objects.get(id=product_id)
-        print("=========product_obj========")
-        print("product_obj: ", product_obj)
-
-        total_price = product_obj.price * Decimal(quantity)
-        
-        print("total_price: ", total_price)   
-        print("=========product_obj========")
         
         new_order_prod, created = order_obj.order_products.get_or_create(product=product_obj)
 
@@ -229,14 +200,6 @@ class OrderProductCreateView(CreateAPIView):
             new_order_prod.quantity += int(quantity)
             new_order_prod.total_price += product_obj.price * Decimal(quantity)
             print("new_order_prod: ", vars(new_order_prod))
-       
-        # new_order_prod = OrderProduct(
-        #     order=order_obj,
-        #     product=product_obj,
-        #     quantity=quantity,
-        #     total_price=total_price)
-
-        # new_order_prod.save()
 
         new_data = {
             'order': order_id,
@@ -245,7 +208,7 @@ class OrderProductCreateView(CreateAPIView):
         }
 
 
-        new_order_prod.save()
+        # new_order_prod.save()
         serializer = self.serializer_class(new_order_prod, data=new_data)
         if serializer.is_valid():
             serializer.save()
