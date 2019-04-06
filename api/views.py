@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from rest_framework.generics import (
     ListAPIView,
     RetrieveAPIView,
@@ -91,10 +93,19 @@ class ProfileUpdateView(APIView):
     def put(self, request, pk, format=None):
         profile = self.get_object(pk)
 
+        print("========Profile Update========")
+        print(request.data)
+        print("========Profile Update========")
+
         data= {"image": request.data['image']} if request.data.get('image') else {"image": None}
         serializer = ProfileCreateUpdateSerializer(profile, data=data)
         user= profile.customer
-        user.update(**request.data['customer'])
+        # user.update(**request.data['customer'])
+        
+        user.first_name= request.data['customer']['first_name']
+        user.last_name= request.data['customer']['last_name']
+        user.save()
+
         if serializer.is_valid():
             serializer.save()
             return Response(ProfileDetailSerializer(profile).data)
@@ -169,6 +180,12 @@ class OrderCreateView(CreateAPIView):
     # def post(self, request):
     #     pass
 
+class OrderStatusUpdateView(RetrieveUpdateAPIView):
+    queryset = Order.objects.all()
+    serializer_class = OrderCreateUpdateSerializer
+    lookup_field = 'id'
+    lookup_url_kwarg = 'order_id'
+    permission_classes = [IsAuthenticated, ]
 
 ## Order Products APIs views
 
@@ -177,6 +194,63 @@ class OrderProductCreateView(CreateAPIView):
     serializer_class= OrderProductCreateUpdateSerializer
     permission_classes =[IsAuthenticated, ]
 
+    def post(self, request):
+        print("========OrderProductCreateView========")
+        print("self: ", self.serializer_class)
+        print("request: ", request.data)
+        
+        order_id = request.data['order']
+        product_id = request.data['product']
+        quantity = request.data['quantity']
+
+        # TODO: use get or create method instead
+        order_obj = Order.objects.get(id=order_id)
+        product_obj = Product.objects.get(id=product_id)
+        print("=========product_obj========")
+        print("product_obj: ", product_obj)
+
+        total_price = product_obj.price * Decimal(quantity)
+        
+        print("total_price: ", total_price)   
+        print("=========product_obj========")
+        
+        new_order_prod, created = order_obj.order_products.get_or_create(product=product_obj)
+
+        print("=========get_or_create========")
+        print("new_order_prod: ", vars(new_order_prod))
+        print("created: ", created)
+
+        if created:
+            new_order_prod.total_price = product_obj.price * Decimal(quantity)
+            new_order_prod.quantity = quantity
+        else:
+            print("int(quantity): ", int(quantity))
+            print("new_order_prod.quantity: ", new_order_prod.quantity)
+            new_order_prod.quantity += int(quantity)
+            new_order_prod.total_price += product_obj.price * Decimal(quantity)
+            print("new_order_prod: ", vars(new_order_prod))
+       
+        # new_order_prod = OrderProduct(
+        #     order=order_obj,
+        #     product=product_obj,
+        #     quantity=quantity,
+        #     total_price=total_price)
+
+        # new_order_prod.save()
+
+        new_data = {
+            'order': order_id,
+            'product': product_id,
+            'quantity': new_order_prod.quantity
+        }
+
+
+        new_order_prod.save()
+        serializer = self.serializer_class(new_order_prod, data=new_data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(OrderProductSerializer(new_order_prod).data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 # maybe we can use the same serializer as the create API view
 class OrderProductQuantityUpdateView(RetrieveUpdateAPIView):

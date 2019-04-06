@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.db.models.signals import post_save, pre_save
+from django.db.models.signals import post_save, pre_save, post_delete
 from django.dispatch import receiver
 
 class Profile(models.Model):
@@ -11,9 +11,6 @@ class Profile(models.Model):
 	def __str__(self):
 		return self.customer.username
 
-@receiver(post_save, sender=User)
-def create_profile(instance, *args, **kwargs):
-	Profile.objects.create(customer=instance)
 
 """
 Status options:
@@ -140,22 +137,36 @@ class OrderProduct(models.Model):
 		return "Product: {} || quantity: {}".format(self.product.name, self.quantity)
 
 
+## Signals ##
+
 # check total_price for orderProduct 
 # after chaning it to pre_save
-@receiver(pre_save, sender=OrderProduct)
+@receiver(post_save, sender=OrderProduct)
+@receiver(post_delete, sender=OrderProduct)
 def get_price(instance, *args, **kwargs):
 	print("===================")
-	print(vars(instance))
+	print("vars: ", vars(instance))
+	print("instance: ", instance)
 	print("===================")
 
-	print("instance.product.price: ", instance.product.price)
-	print("instance.quantity: ", instance.quantity)
-	total_price = instance.product.price * instance.quantity
+	# print("instance.product.price: ", instance.product.price)
+	# print("instance.quantity: ", instance.quantity)
+	# total_price = instance.product.price * instance.quantity
 	
-	instance.total_price = total_price
-	print("total_price: ", total_price)
+	# instance.total_price = total_price
+	# print("total_price: ", total_price)
 
 	# post save and post delete signal
 	instance.order.set_total_price()
+
+
+# @receiver(pre_save, sender=OrderProduct)
+# def get_product_price(instance, *args, **kwargs):
+# 	instance.get_price()
+
+@receiver(post_save, sender=User)
+def create_profile(instance, *args, **kwargs):
+	print("========Profile Creations========")
+	Profile.objects.create(customer=instance)
 
 
