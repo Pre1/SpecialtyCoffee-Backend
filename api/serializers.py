@@ -113,10 +113,21 @@ class OrderProductSerializer(serializers.ModelSerializer):
 
 class OrderListSerializer(serializers.ModelSerializer):
 
+    order_products_count = serializers.SerializerMethodField()
+
     class Meta:
         model = Order
-        fields = ['id', 'status', 'ordered_by', 'total_price', 'created_at']
+        fields = [
+            'id',
+            'status',
+            'ordered_by',
+            'total_price',
+            'order_products_count', 
+            'created_at'
+        ]
 
+    def get_order_products_count(self, obj):
+        return obj.order_products.all().count()
 
 class OrderDetailSerializer(serializers.ModelSerializer):
     order_products = OrderProductSerializer(many=True, read_only=True)

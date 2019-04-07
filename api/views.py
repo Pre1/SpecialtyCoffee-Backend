@@ -128,6 +128,41 @@ class ProfileUpdateView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+class ProfileUpdateUpdateView(APIView):
+    def get_object(self, user):
+        try:
+            return Profile.objects.get(customer=user)
+        except Profile.DoesNotExist:
+            raise Http404
+
+    def get(self, request, user, format=None):
+        profile = self.get_object(request.user)
+        serializer = ProfileDetailSerializer(profile)
+        return Response(serializer.data)
+
+
+    def put(self, request):
+        profile = self.get_object(request.user)
+
+        print("========Profile Update========")
+        print(request.data)
+        print("========Profile Update========")
+
+        data= {"image": request.data['image']} if request.data.get('image') else {"image": None}
+        serializer = ProfileCreateUpdateSerializer(profile, data=data)
+        user= profile.customer
+        # user.update(**request.data['customer'])
+        
+        user.first_name= request.data['customer']['first_name']
+        user.last_name= request.data['customer']['last_name']
+        user.save()
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(ProfileDetailSerializer(profile).data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
 # No need for listing 
 class StatusListView(ListAPIView):
     queryset = Status.objects.filter(is_active=True)

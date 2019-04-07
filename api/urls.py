@@ -6,6 +6,7 @@ from .views import (
     ProfileDetailView,
     ProfileDetailDetailView,
     ProfileUpdateView,
+    ProfileUpdateUpdateView,
     UserCreateAPIView
 )
 
@@ -40,8 +41,12 @@ urlpatterns = [
     ## Auth ##
     path('login/', obtain_jwt_token, name='login'),
     path('register/', UserCreateAPIView.as_view(), name='register'),
+    
     path('profile/update/<int:pk>/',
          ProfileUpdateView.as_view(), name='profile-update'),
+    
+    path('profile/update/',
+         ProfileUpdateUpdateView.as_view(), name='profile-update-update'),
     
     path('profile/detail/<int:profile_id>/',
          ProfileDetailView.as_view(), name='profile-detail'),
@@ -64,7 +69,8 @@ urlpatterns = [
          OrderDetailView.as_view(), name='orders-detail'),
     path('orders/create/', OrderCreateView.as_view(), name='orders-create'),
     
-    path('orders/update/<int:order_id>', OrderStatusUpdateView.as_view(), name='orders-status-update'),
+    path('orders/update/<int:order_id>', 
+        OrderStatusUpdateView.as_view(), name='orders-status-update'),
 
     ## OrderProduct ##
     path('orderproduct/create/',
