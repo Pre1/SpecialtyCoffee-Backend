@@ -4,6 +4,7 @@ from rest_framework_jwt.views import obtain_jwt_token
 ## Auth & Profile ##
 from .views import (
     ProfileDetailView,
+    ProfileDetailDetailView,
     ProfileUpdateView,
     UserCreateAPIView
 )
@@ -41,8 +42,12 @@ urlpatterns = [
     path('register/', UserCreateAPIView.as_view(), name='register'),
     path('profile/update/<int:pk>/',
          ProfileUpdateView.as_view(), name='profile-update'),
+    
     path('profile/detail/<int:profile_id>/',
          ProfileDetailView.as_view(), name='profile-detail'),
+    
+    path('profile/detail/',
+         ProfileDetailDetailView.as_view(), name='profile-detail-detail'),
 
     ## Status ##
     path('status/list/', StatusListView.as_view(), name='status-list'),

@@ -77,6 +77,22 @@ class ProfileDetailView(RetrieveAPIView):
     lookup_field = 'id'
     lookup_url_kwarg = 'profile_id'
 
+class ProfileDetailDetailView(RetrieveAPIView):
+
+    permission_classes = [IsAuthenticated, ]
+    def get(self, request, format=None):
+        print("=======ProfileDetailDetailView=======")
+        print("customer => request.user: ", request.user)
+
+        profile = Profile.objects.get(customer=request.user)
+
+        print("profile: ", profile)
+
+        serializer = ProfileDetailSerializer(profile)
+        return Response(serializer.data)
+
+
+
 class ProfileUpdateView(APIView):
     def get_object(self, pk):
         try:
@@ -243,7 +259,7 @@ class OrderProductQuantityUpdateView(RetrieveUpdateAPIView):
 
         print("prod_obj: ", prod_obj)
         print("order_prod.product: ", order_prod.product)
-        
+
         order_prod.total_price = prod_obj.price * Decimal(quantity)
 
         print("order_prod.total_price: ", order_prod.total_price)
