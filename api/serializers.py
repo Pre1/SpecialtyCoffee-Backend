@@ -83,8 +83,7 @@ class ProductDetailSerializer(serializers.ModelSerializer):
 
 	class Meta:
 		model = Product
-		# fields = '__all__'
-		exclude = ['added_by']
+		fields = '__all__'
 
 
 ### Order Serializers ###
