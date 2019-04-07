@@ -234,6 +234,26 @@ class OrderProductQuantityUpdateView(RetrieveUpdateAPIView):
         print("=========OrderProductQuantityUpdateView========")
         print("serializer: ", serializer)
         print("vars(serializer): ", vars(serializer))
+
+        print("serializer.instance: ", serializer.instance)
+        quantity = serializer.validated_data['quantity']
+        order_prod = serializer.instance
+        # prod_obj = Product.objects.get(id= order_prod.product.id)
+        prod_obj = order_prod.product
+
+        print("prod_obj: ", prod_obj)
+        print("order_prod.product: ", order_prod.product)
+        
+        order_prod.total_price = prod_obj.price * Decimal(quantity)
+
+        print("order_prod.total_price: ", order_prod.total_price)
+        # print("dir(self): ", dir(self))
+        # print("vars(self): ", vars(self))
+        # print("queryset: ", self.get_queryset())
+        
+
+        # print("quantity: ", data['quantity'])
+
         print("=========END OrderProductQuantityUpdateView END========")
         serializer.save()
 

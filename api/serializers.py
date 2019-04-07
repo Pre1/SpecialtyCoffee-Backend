@@ -46,8 +46,8 @@ class UserCreateSerializer(serializers.ModelSerializer):
 
         # Saving the user to a new profile:
         # post save signal on user model
-        # new_profile = Profile(customer=new_user)
-        # new_profile.save()
+        new_profile = Profile(customer=new_user)
+        new_profile.save()
 
         jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
         jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
@@ -124,7 +124,7 @@ class OrderDetailSerializer(serializers.ModelSerializer):
     status = StatusListSerializer()
     class Meta:
         model = Order
-        fields = ['id','status', 'ordered_by', 'created_at', 'order_products']
+        fields = ['id','status', 'ordered_by', 'created_at', 'order_products', 'total_price']
 
 
 

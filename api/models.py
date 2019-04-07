@@ -5,7 +5,8 @@ from django.dispatch import receiver
 
 class Profile(models.Model):
 	# from fk to 1to1
-	customer = models.OneToOneField(User, default=1, on_delete=models.CASCADE)
+	customer = models.OneToOneField(User, on_delete=models.CASCADE)
+	# customer = models.OneToOneField(User, default=1, on_delete=models.CASCADE)
 	image = models.ImageField(null=True, blank=True)
 
 	def __str__(self):
@@ -44,7 +45,7 @@ class Product(models.Model):
 	image = models.ImageField(null=True, blank=True)
 	is_avaliable = models.BooleanField(default=True)
 	created_at = models.DateTimeField(auto_now_add=True)
-	added_by = models.ForeignKey(User, default=1, on_delete=models.CASCADE)
+	# added_by = models.ForeignKey(User, default=1, on_delete=models.CASCADE)
 
 	def __str__(self):
 		return self.name
@@ -154,9 +155,11 @@ def get_price(instance, *args, **kwargs):
 	instance.order.set_total_price()
 
 
-@receiver(post_save, sender=User)
-def create_profile(instance, *args, **kwargs):
-	print("========Profile Creations========")
-	Profile.objects.create(customer=instance)
+# @receiver(post_save, sender=User)
+# def create_profile(instance, *args, created, **kwargs):
+# 	print("========Profile Creations========")
+# 	if created:
+# 		print("pre")
+# 		Profile.objects.create(customer=instance)
 
 
