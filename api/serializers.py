@@ -162,9 +162,14 @@ class OrderProductQuantityUpdateSerializer(serializers.ModelSerializer):
 class ProfileDetailSerializer(serializers.ModelSerializer):
     customer = UserSerializer()
     customer_orders = OrderDetailSerializer(many=True)
+    # image = serializers.SerializerMethodField()
+
     class Meta:
         model = Profile
         fields = ['customer', 'image', 'customer_orders']
+
+
+    # get_image(self)
 
 
 class ProfileCreateUpdateSerializer(serializers.ModelSerializer):

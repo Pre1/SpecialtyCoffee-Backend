@@ -13,16 +13,6 @@ class Profile(models.Model):
 		return self.customer.username
 
 
-"""
-Status options:
-
-- New
-- In Progress 
-- Completed
-- Canceled
-- On Hold
-
-"""
 class Status(models.Model):
 	title = models.CharField(max_length=120)
 	is_active = models.BooleanField(default=True)
@@ -32,9 +22,7 @@ class Status(models.Model):
 
 
 class Product(models.Model):
-	"""
-	Description: Product
-	"""
+
 	name = models.CharField(max_length=120)
 	process = models.CharField(max_length=120)
 	flavor = models.CharField(max_length=120)
@@ -45,6 +33,7 @@ class Product(models.Model):
 	image = models.ImageField(null=True, blank=True)
 	is_avaliable = models.BooleanField(default=True)
 	created_at = models.DateTimeField(auto_now_add=True)
+	# take this back and test it
 	# added_by = models.ForeignKey(User, default=1, on_delete=models.CASCADE)
 
 	def __str__(self):
@@ -52,7 +41,6 @@ class Product(models.Model):
 
 	class Meta:
 		ordering = ['-created_at', ]
-
 
 
 """
@@ -64,9 +52,7 @@ order = [
 """
 
 class Order(models.Model):
-	"""
-	Description: Order
-	"""
+
 	status = models.ForeignKey(
 		Status,
 		default=1, 
@@ -117,9 +103,6 @@ cart = [
 """
 
 class OrderProduct(models.Model):
-	"""
-	Description: OrderProduct
-	"""
 
 	order = models.ForeignKey(
 		Order, 

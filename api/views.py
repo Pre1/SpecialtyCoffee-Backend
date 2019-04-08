@@ -52,9 +52,9 @@ from django.contrib.auth.models import User
 
 
 from .serializers import (
-UserCreateSerializer,  
-ProfileDetailSerializer, 
-ProfileCreateUpdateSerializer
+    UserCreateSerializer,  
+    ProfileDetailSerializer, 
+    ProfileCreateUpdateSerializer
 )
 
 
@@ -88,11 +88,11 @@ class ProfileDetailDetailView(RetrieveAPIView):
 
         print("profile: ", profile)
 
-        serializer = ProfileDetailSerializer(profile)
+        serializer = ProfileDetailSerializer(profile, context= {"request": request})
         return Response(serializer.data)
 
 
-
+### Old profile update API ###
 class ProfileUpdateView(APIView):
     def get_object(self, pk):
         try:
@@ -144,14 +144,9 @@ class ProfileUpdateUpdateView(APIView):
     def put(self, request):
         profile = self.get_object(request.user)
 
-        print("========Profile Update========")
-        print(request.data)
-        print("========Profile Update========")
-
         data= {"image": request.data['image']} if request.data.get('image') else {"image": None}
         serializer = ProfileCreateUpdateSerializer(profile, data=data)
         user= profile.customer
-        # user.update(**request.data['customer'])
         
         user.first_name= request.data['customer']['first_name']
         user.last_name= request.data['customer']['last_name']
@@ -187,6 +182,7 @@ class ProductDetailView(RetrieveAPIView):
 
 
 ## Order APIs views ##
+## this's might be not needed, check profile detail order list. 
 class OrderListView(ListAPIView):
     serializer_class = OrderListSerializer
     permission_classes = [IsAuthenticated, ]
