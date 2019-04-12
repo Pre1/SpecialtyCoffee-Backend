@@ -1,4 +1,5 @@
 from decimal import Decimal
+import requests
 
 from rest_framework.generics import (
     ListAPIView,
@@ -202,11 +203,66 @@ class OrderCreateView(CreateAPIView):
 
 
 class OrderStatusUpdateView(RetrieveUpdateAPIView):
-    queryset = Order.objects.all()
-    serializer_class = OrderCreateUpdateSerializer
-    lookup_field = 'id'
-    lookup_url_kwarg = 'order_id'
     permission_classes = [IsAuthenticated, ]
+
+    def put(self, request, order_id):
+
+        order_obj = Order.objects.get(id=order_id)
+        
+        status = request.data['status']
+        status_obj = Status.objects.get(id = status)
+
+        print("request.data: ", request.data)
+
+        serializer = OrderCreateUpdateSerializer(order_obj, data=request.data)
+
+        #====== set up payment gatway ======#
+        url = "https://api.tap.company/v2/charges"
+        headers = {
+            'authorization': "Bearer sk_test_XKokBfNWv6FIYuTMg5sLPjhJ",
+            'content-type': "application/json"
+        }
+        phoneNum = '0551234567' # for testing
+        total_price = order_obj.total_price
+        payload = """
+            {
+                "amount": "%s",
+                "currency": "SAR",
+                "threeDSecure": "true",
+                "customer": {
+                    "first_name": "%s",
+                    "last_name": "%s",
+                    "email": "%s",
+                    "phone": {
+                        "country_code": "966",
+                        "number": "%s"
+                    }
+                },
+                "source": {
+                    "id": "src_all"
+                },
+                "redirect": {
+                    "url": "http://localhost:3000/profile"
+                }
+            }
+        """ %(
+                total_price,
+                order_obj.ordered_by.customer.first_name,
+                order_obj.ordered_by.customer.last_name,
+                order_obj.ordered_by.customer.email,
+                phoneNum
+            )
+
+        print("paylod", payload)
+
+        response = requests.post(url, data=payload, headers=headers)
+
+        payment_url = response.json()['transaction']['url']
+        print(payment_url)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"order_status": serializer.data, "payment_url": payment_url})
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 # Order Products APIs views
 
