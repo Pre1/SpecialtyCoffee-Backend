@@ -3,54 +3,44 @@ from rest_framework_jwt.views import obtain_jwt_token
 
 ## Auth & Profile ##
 from .views import (
+
+    UserCreateAPIView,
     ProfileDetailView,
     ProfileDetailDetailView,
     ProfileUpdateView,
     ProfileUpdateUpdateView,
-    UserCreateAPIView
-)
 
-## Product API Views ##
-from .views import (
     ProductListView,
     ProductDetailView,
-)
 
-## Status API views ##
-from api.views import (
-    StatusListView,
-)
-
-## Order APIs ##
-from api.views import (
     OrderListView,
     OrderDetailView,
     OrderCreateView,
     OrderStatusUpdateView,
-)
 
-## OrderProduct APIs ##
-from api.views import (
+    StatusListView,
+
     OrderProductCreateView,
     OrderProductDeleteView,
     OrderProductQuantityUpdateView,
     OrderProductDetailView,
 )
 
+
 urlpatterns = [
     ## Auth ##
     path('login/', obtain_jwt_token, name='login'),
     path('register/', UserCreateAPIView.as_view(), name='register'),
-    
+
     path('profile/update/<int:pk>/',
          ProfileUpdateView.as_view(), name='profile-update'),
-    
+
     path('profile/update/',
          ProfileUpdateUpdateView.as_view(), name='profile-update-update'),
-    
+
     path('profile/detail/<int:profile_id>/',
          ProfileDetailView.as_view(), name='profile-detail'),
-    
+
     path('profile/detail/',
          ProfileDetailDetailView.as_view(), name='profile-detail-detail'),
 
@@ -68,9 +58,9 @@ urlpatterns = [
     path('orders/detail/<int:order_id>/',
          OrderDetailView.as_view(), name='orders-detail'),
     path('orders/create/', OrderCreateView.as_view(), name='orders-create'),
-    
-    path('orders/update/<int:order_id>', 
-        OrderStatusUpdateView.as_view(), name='orders-status-update'),
+
+    path('orders/update/<int:order_id>',
+         OrderStatusUpdateView.as_view(), name='orders-status-update'),
 
     ## OrderProduct ##
     path('orderproduct/create/',
